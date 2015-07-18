@@ -7,7 +7,7 @@ public class ChatServer{
     public void listen(){
         try{
             server = new ServerSocket(18080);
-            System.out.println("Echoサーバをポート18080で起動しました．");
+            System.out.println("Chatサーバをポート18080で起動しました．");
             //Socket socket = server.accept();
             System.out.println("クライアントが接続してきました．");
 
