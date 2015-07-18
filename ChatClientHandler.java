@@ -18,13 +18,16 @@ public class ChatClientHandler extends Thread{
             open();
             while(true){
                 String message = receive();
-                if(message.equals("")) break;
-                send(message);
+		String[] commands = message.split(" ");
+		//それぞれの入力コマンドによって分岐させる
+		if(commands[0].equalsIgnoreCase("help")) {
+		    help();
+		}
             }
         } catch(IOException e){
             e.printStackTrace();
         } finally{
-            close();
+            this.close();
         }
     }
 
@@ -38,6 +41,11 @@ public class ChatClientHandler extends Thread{
         out = new BufferedWriter(
             new OutputStreamWriter(socket.getOutputStream())
         );
+    }
+
+    //helpコマンド(使えるコマンドの種類を表示させる)
+    public void help() throws IOException {
+        this.send("HELP,NAME,WHOAMI,USERS,BYE,POST");
     }
 
     /**
