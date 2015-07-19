@@ -23,7 +23,7 @@ public class ChatClientHandler extends Thread{
 		String[] commands = message.split(" ");
 		//それぞれの入力コマンドによって分岐させる
 		if(commands[0].equalsIgnoreCase("help")) {
-		    help();
+		    help(); 
 		}
                 if(commands[0].equalsIgnoreCase("name")) {
                     name(commands[1]);
