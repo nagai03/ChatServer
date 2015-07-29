@@ -35,7 +35,19 @@ public class ChatClientHandler extends Thread{
             this.close();
         }
     }
-
+    
+    //byeコマンド(通話終了時の処理)
+    public void bye() throws IOException {
+        this.send("bye " + this.name);
+        for(int i=0;i<clients.size();i++) {
+            ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+            if(handler==this) {
+                clients.remove(handler);
+            }
+        }
+        this.close();
+    }
+    
     /**
      * クライアントとのデータのやり取りを行うストリームを開くメソッド．
      */

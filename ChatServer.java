@@ -4,7 +4,8 @@ import java.io.*;
 public class ChatServer{
     private ServerSocket server;
     private String name2;  //古い名前を格納
-　　private List<String> namae = new ArrayList<String>();//クライアントの名前を格納
+    private List<String> namae = new ArrayList<String>();
+    //クライアントの名前を格納
 
     public void listen(){
         try{
