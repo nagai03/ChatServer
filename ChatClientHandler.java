@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class ChatClientHandler extends Thread{
     private Socket socket;
@@ -31,6 +32,9 @@ public class ChatClientHandler extends Thread{
 		if(commands[0].equalsIgnoreCase("whoami")){
 		    whoami();
 		}
+		 if(commands[0].equalsIgnoreCase("post")) {
+                    post(commands[1]);
+                }
             }
         } catch(IOException e){
             e.printStackTrace();
@@ -53,7 +57,7 @@ public class ChatClientHandler extends Thread{
 
     //helpコマンド(使えるコマンドの種類を表示させる)
     public void help() throws IOException {
-        this.send("HELP,NAME,WHOAMI,USERS,BYE,POST");
+        this.send("HELP,NAME,WHOAMI,BYE,POST");
     }
     
     //nameコマンド(自分の名前を設定する処理)
@@ -71,6 +75,34 @@ public class ChatClientHandler extends Thread{
     public void whoami() throws IOException {
 	this.send(name);
     }
+    
+    //postコマンド(接続しているクライアントにメッセージを送るメソッド)
+    public void post(String message) throws IOException {
+	//接続しているクライアント全員にmessageを送りたい
+	//名前のリストを保存
+	List names = new ArrayList();
+	for(int i=0;i<clients.size();i++) {
+	    ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+	    //自分自身で無ければメッセージを送る
+	    if(handler!=this) {
+		//誰に送ったのかの一覧表示
+		names.add(handler.getClientName());
+		//送るメッセージ
+		handler.send("[" + this.getClientName() + "]" + message);	
+	    }
+	}
+	//リストをソート済み
+	Collections.sort(names);
+	//このリストを転送
+	//コンマ区切りにする
+	String returnMessage = "";
+	for(int i=0; i<names.size(); i++) {
+	    returnMessage = returnMessage + names.get(i) + ",";
+	}
+	//本人にこのメッセージを送る
+	this.send(returnMessage);
+    }
+    
     /**
      * クライアントからデータを受け取るメソッド．
      */
