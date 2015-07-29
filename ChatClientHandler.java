@@ -7,11 +7,11 @@ public class ChatClientHandler extends Thread{
     private BufferedWriter out;
     String name;  //ユーザの名前
     ChatServer chat2;  //チャットサーバの参照型変数
-
+    
     public ChatClientHandler(Socket socket){
         this.socket = socket;
     }
-
+    
     /**
      * 並列実行を行うときに実行されるメソッド．
      */
@@ -28,6 +28,9 @@ public class ChatClientHandler extends Thread{
                 if(commands[0].equalsIgnoreCase("name")) {
                     name(commands[1]);
                 }
+		if(commands[0].equalsIgnoreCase("whoami")){
+		    whoami();
+		}
             }
         } catch(IOException e){
             e.printStackTrace();
@@ -35,7 +38,7 @@ public class ChatClientHandler extends Thread{
             this.close();
         }
     }
-
+    
     /**
      * クライアントとのデータのやり取りを行うストリームを開くメソッド．
      */
@@ -53,7 +56,7 @@ public class ChatClientHandler extends Thread{
         this.send("HELP,NAME,WHOAMI,USERS,BYE,POST");
     }
     
-        //nameコマンド(自分の名前を設定する処理)
+    //nameコマンド(自分の名前を設定する処理)
     public void name(String name) throws IOException {
         int a = chat2.changeName(name);
         if(a == 0) {
@@ -64,6 +67,10 @@ public class ChatClientHandler extends Thread{
         }
     }
 
+    //whoamiコマンド(自分の名前を返す処理)
+    public void whoami() throws IOException {
+	this.send(name);
+    }
     /**
      * クライアントからデータを受け取るメソッド．
      */
